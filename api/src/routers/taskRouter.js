@@ -4,7 +4,7 @@ import {
   getTasks,
   insterTask,
   updateTask,
-  deleteTaskById,
+  // deleteTaskById,
   deleteManyTasks
 } from "../model/task/TaskModel.js";
 const router = express.Router();
@@ -35,11 +35,21 @@ router.post("/", async (req, res, next) => {
     const result = await insterTask(req.body);
 
     console.log(result);
-    res.json({
-      status: "success", // either success or error
-      messsage: "todo",
-      result,
-    });
+
+    result?._id 
+     
+     ? res.json({
+        status: "success", // either success or error
+        messsage: "New task has been added",
+      
+      })
+      
+      :  res.json({
+          status: "error", // either success or error
+          messsage: "Error!!! Unable to add new task. Please Try again later",
+          result,
+
+      })
   } catch (error) {
     next(error);
   }
@@ -66,7 +76,7 @@ router.patch("/", async (req, res, next) => {
 router.delete("/", async (req, res, next) => {
   try {
 
-    const {ids} = req.body
+    const ids = req.body
     // const result = await deleteTaskById(_id)
     const result = await deleteManyTasks(ids)
     console.log(result)
